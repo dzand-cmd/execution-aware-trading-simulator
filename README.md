@@ -1,137 +1,89 @@
-# Execution-Aware Backtesting Framework
+# Execution-Aware Trading Simulator
 
-**Author:** dzand-cmd  
-**Project Type:** Quantitative Research / Algorithmic Trading  
+**Author:** Dzandu Selorm(dzand-cmd)  
+**Project Type:** Quantitative Research  
 **Language:** Python  
 **Status:** Complete 
 
 ---
 
+
 ## Overview
 
-This project implements an execution-aware backtesting engine in Python that evaluates trading strategies using historical market data. Unlike basic backtests, this system incorporates real-world trading frictions such as slippage and commissions, providing a more realistic view of strategy performance.
+This project implements an execution-aware trading simulator that models how trading strategies behave under realistic market execution constraints. It simulates order placement, partial fills, slippage, and execution delays to bridge the gap between theoretical signals and real-world trading performance.
 
-The backtester uses a simple moving average crossover strategy to generate signals and simulates trade execution while tracking portfolio value over time.
+The objective is to evaluate how execution frictions impact strategy profitability and risk-adjusted returns.
 
 ---
+
+
+## Project Structure
+
+execution-aware-trading-simulator/
+│
+├── src/
+│   ├── execution_aware_trading_simulator.py      # Core execution simulation loop
+├── README.md            # Project documentation
+
 
 ## Features
 
-* Historical market data retrieval using Yahoo Finance
-* Signal generation via moving average crossover (SMA10 vs SMA50)
-* Execution-aware trade simulation
-* Slippage and commission modeling
-* Portfolio value tracking over time
-* Visualization of price vs portfolio performance
+- Historical market data retrieval using Yahoo Finance
+- Signal generation via moving average crossover (SMA10 vs SMA50)
+- Execution-aware trade simulation
+- Slippage and commission modeling
+- Portfolio value tracking over time
+- Visualization of price vs portfolio performance
 
 ---
 
-## System Design
 
-The system is structured around three core components:
+## Core Features
 
-* **Data Layer**: Fetches historical price data using `yfinance`
-* **Signal Engine**: Generates buy/sell signals based on SMA crossover
-* **Execution Engine**: Simulates trades with slippage and transaction costs while updating cash and positions
+- Order lifecycle simulation:
+ - Order creation
+ - Submission
+ - Execution
+ - Completion / cancellation
+- Execution modeling:
+ - Partial fills
+ - Slippage modeling
+ - Fill probability approximation
+ - Market impact estimation
+- Strategy integration:
+ - Signal-driven order generation
+ - Strategy plug-in structure
+- Performance metrics:
+ - PnL tracking
+ - Sharpe ratio
+ - Execution cost analysis
+ - Fill ratio 
 
----
 
-## Strategy Logic
+## Methodology
 
-* Compute:
+This simulator bridges strategy signals with real-world execution constraints:
 
-  * 10-day moving average (SMA10)
-  * 50-day moving average (SMA50)
+- A trading signal is generated
+- The strategy converts it into an order
+- Orders are submitted to the simulator
+- Execution logic determines:
+- Fill timing
+- Fill quantity
+- Execution price (including slippage)
+- Portfolio performance is updated over time
 
-* Generate signals:
+## Key idea:
 
-  * **Buy (1)** when SMA10 > SMA50
-  * **Sell (-1)** when SMA10 ≤ SMA50
+A profitable signal can become unprofitable after realistic execution cost
 
-* Execution assumptions:
 
-  * All-in / all-out position sizing
-  * Slippage applied to execution price
-  * Fixed commission per trade
+## How To Run 
 
----
+git clone https://github.com/dzand-cmd/execution-aware-trading-simulator.git
+cd execution-aware-trading-simulator
+python execution_aware_trading_simulator.py
 
-## Example Workflow
 
-1. Fetch historical price data for a given ticker
-2. Compute technical indicators (SMA10, SMA50)
-3. Generate trading signals
-4. Execute trades with slippage and commission
-5. Track portfolio value over time
-6. Visualize results
 
----
 
-## How to Run
-
-1. Install dependencies:
-
-   ```bash
-   pip install yfinance pandas numpy matplotlib
-   ```
-
-2. Run the script:
-
-   ```bash
-   python execution_aware_backtester.py
-   ```
-
----
-
-## Output
-
-* Tabular view of recent data including:
-
-  * Price
-  * Indicators (SMA10, SMA50)
-  * Signals
-  * Portfolio value
-
-* Plot showing:
-
-  * Asset price
-  * Portfolio performance over time
-
----
-
-## Why This Matters
-
-Most basic backtests ignore execution costs, leading to overly optimistic results. This project introduces realistic trading frictions such as slippage and commissions, making performance evaluation more aligned with real-world trading conditions.
-
-It demonstrates key concepts in quantitative finance:
-
-* Strategy evaluation
-* Execution modeling
-* Portfolio tracking
-
----
-
-## Limitations
-
-* Uses simple all-in / all-out position sizing
-* No risk management or position scaling
-* Limited to a single asset
-* No intraday or high-frequency modeling
-* No transaction latency
-
----
-
-## Future Improvements
-
-* Add position sizing and risk management
-* Support multi-asset portfolios
-* Introduce event-driven architecture
-* Incorporate more advanced execution models
-* Add performance metrics (Sharpe ratio, drawdown)
-* Optimize for speed and scalability
-
----
-
-## Key Takeaway
-
-This project highlights the importance of incorporating execution costs into backtesting. By modeling slippage and commissions, it provides a more realistic framework for evaluating trading strategies and serves as a strong foundation for building more advanced quantitative trading systems.
